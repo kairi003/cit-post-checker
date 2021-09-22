@@ -5,6 +5,9 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+class LoginError(Exception):
+    pass
+
 
 HEADERS = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -29,7 +32,10 @@ class TopPage:
         }
         url = "https://portal.it-chiba.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml"
         response = self.ses.post(url, login_form)
-        return BeautifulSoup(response.content, 'lxml')
+        soup = BeautifulSoup(response.content, 'lxml')
+        if not soup.select_one('form#menuForm'):
+            raise LoginError('ログイン失敗')
+        return soup
 
 
 class Billboard:

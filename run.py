@@ -11,23 +11,37 @@ app = Flask(__name__)
 async def root():
     return render_template('index.html')
 
+
 @app.route('/api.json', methods=['POST'])
-async def api():
+def api():
     user_id = request.form.get('user_id', '')
     password = request.form.get('password', '')
     full = 'full' in request.form
-    
-    top_page = TopPage(user_id, password)
+    try:
+        top_page = TopPage(user_id, password)
+    except LoginError:
+        error_data = {
+            'head':{
+                'userId': user_id,
+                'timestamp': datetime.now().timestamp(),
+                'status': 'failed'
+            },
+            'body': {'message': 'Login Error'}
+        }
+        return jsonify(error_data), 401
     board = Billboard(top_page)
     if full:
         board = FullBillBoard(board)
     body = list(board.post_iter())
     data = {
-        'userId': user_id,
-        'timestamp': datetime.now().timestamp(),
+        'head': {
+            'userId': user_id,
+            'timestamp': datetime.now().timestamp(),
+            'status': 'success'
+        },
         'body': body
     }
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=8000)
+    app.run('0.0.0.0', port=8000, debug=False)
