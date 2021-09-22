@@ -62,10 +62,10 @@ class Billboard:
         return soup
     
     def func_post(self, data):
-        post_data = self.func_data | data | self.rx_data
+        post_data = {**self.func_data, **data, **self.rx_data}
         response = self.ses.post('https://portal.it-chiba.ac.jp/uprx/up/bs/bsd007/Bsd00701.xhtml', post_data)
         soup = BeautifulSoup(response.content, 'lxml')
-        self.rx_data |= {t.get('name'): t.get('value') for t in soup.select('input[name^="rx-"]')}
+        self.rx_data.update({t.get('name'): t.get('value') for t in soup.select('input[name^="rx-"]')})
         return soup
     
     def post_iter(self):
