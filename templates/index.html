@@ -1,0 +1,13 @@
+<!doctype html>
+<title>cit-post-checker</title>
+<meta property="og:title" content="cit-post-checker" />
+<meta property="og:description" content="IDとパスワードを打ち込むとCITポータルの掲示板の件名がJSON形式で取得できるぞ。利用は自己責任なんだ。" />
+
+<h1>cit-post-checker</h1>
+<p>IDとパスワードを打ち込むとCITポータルの掲示板の件名がJSON形式で取得できるぞ。利用は自己責任なんだ。</p>
+<form method="POST" action="/api.json">
+  <label>ID: <input name="user_id" type="text" placeholder="UserID"/></label>
+  <label>PASS: <input name="password" type="password" placeholder="Password"/></label> 
+  <label>全件取得: <input name="full" type="checkbox" /></label>
+  <button type="submit">submit</button>
+</form>
