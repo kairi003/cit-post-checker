@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, request, render_template
-from portal_wrapper import *
+from cit_portal_wrapper import *
 from datetime import datetime
 
 app = Flask(__name__)
@@ -29,9 +29,9 @@ def api():
             'body': {'message': 'Login Error'}
         }
         return jsonify(error_data), 401
-    board = Billboard(top_page)
+    board = Noticeboard(top_page)
     if full:
-        board = FullBillBoard(board)
+        board = FullNoticeboard(board)
     body = list(board.post_iter())
     data = {
         'head': {
